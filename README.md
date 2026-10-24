@@ -2,7 +2,8 @@
 
 一个 Windows 98 风格的复古游戏俱乐部 Demo —— 90 分钟黑客松作品，零依赖、纯前端、可离线运行。
 
-**在线体验**：<https://jixu789.github.io/98club-demo/>
+**在线体验**：<https://Jixu789.github.io/98club-demo/showcase.html>（视频 + 可玩 Demo 合并页）
+**直接开玩**：<https://Jixu789.github.io/98club-demo/>
 
 ## 是什么
 
