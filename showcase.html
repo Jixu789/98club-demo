@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>98 CLUB · 演示视频与可玩 Demo</title>
+<style>
+:root{
+  --bg:#04080a;
+  --panel:#0a120e;
+  --chrome:#0e1712;
+  --chrome2:#122019;
+  --edge-hi:#3c5a48;
+  --edge-lo:#000;
+  --green:#3dff7c;
+  --cyan:#22e0e0;
+  --ink:#d7ffe4;
+  --dim:#7fa891;
+  --gold:#ffd451;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+  overflow:hidden;
+  background-image:radial-gradient(1200px 600px at 50% -10%,rgba(61,255,124,.10),transparent 60%),
+                   radial-gradient(900px 500px at 100% 110%,rgba(34,224,224,.08),transparent 60%);
+}
+/* CRT 覆盖层 */
+.crt{position:fixed;inset:0;pointer-events:none;z-index:60;
+  background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.16) 2px 4px);
+  mix-blend-mode:multiply}
+.crt::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 90% at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%)}
+
+/* 顶栏 */
+.bar{
+  height:52px;display:flex;align-items:center;gap:16px;padding:0 14px;
+  background:linear-gradient(180deg,var(--chrome2),var(--chrome));
+  border-bottom:1px solid var(--edge-hi);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 0 #000;
+  position:relative;z-index:40
+}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.logo{
+  display:inline-grid;place-items:center;width:30px;height:30px;border-radius:4px;
+  background:linear-gradient(180deg,#3dff7c,#12a34d);color:#03210f;font-weight:900;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 14px rgba(61,255,124,.35)
+}
+.brand .dim{color:var(--dim);font-weight:500;font-size:12px;letter-spacing:.12em}
+.tabs{margin-left:8px;display:flex;gap:8px}
+.tab{
+  font:inherit;font-size:13px;color:var(--dim);cursor:pointer;
+  padding:6px 14px;background:var(--chrome);border:1px solid var(--edge-hi);
+  box-shadow:inset -1px -1px #000,inset 1px 1px rgba(255,255,255,.10);
+}
+.tab:hover{color:var(--ink)}
+.tab.is-on{
+  color:#03210f;background:linear-gradient(180deg,#5cff95,#22c25c);border-color:#8dffb8;
+  box-shadow:inset -1px -1px rgba(0,0,0,.35),inset 1px 1px rgba(255,255,255,.7),0 0 12px rgba(61,255,124,.35)
+}
+.bar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.chip{font-size:12px;color:var(--dim);border:1px solid #1e3327;padding:4px 9px;background:#081009;white-space:nowrap}
+a.chip{color:var(--cyan);text-decoration:none;border-color:#154244}
+a.chip:hover{background:#0b1c1e;box-shadow:0 0 10px rgba(34,224,224,.25)}
+
+/* 视图 */
+main{height:calc(100vh - 52px);position:relative;z-index:10}
+.view{display:none;height:100%;padding:18px;gap:18px}
+.view.is-on{display:flex}
+#view-video{flex-direction:row}
+#view-play{padding:14px}
+
+/* 窗口框 */
+.frame{
+  display:flex;flex-direction:column;min-width:0;
+  background:var(--chrome);border:1px solid var(--edge-hi);
+  box-shadow:inset -1px -1px #000,inset 1px 1px rgba(255,255,255,.10),0 14px 40px rgba(0,0,0,.6)
+}
+.frame-bar{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;font-size:12px;color:#bfffd4;
+  background:linear-gradient(90deg,#08351c,#0d6d3a 60%,#0a4f2b);
+  border-bottom:1px solid #000;letter-spacing:.04em
+}
+.dot{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green)}
+.frame-bar .grow{flex:1}
+.mini{
+  font:inherit;font-size:11px;color:#d7ffe4;cursor:pointer;text-decoration:none;
+  padding:3px 9px;background:#0b1a12;border:1px solid #2c4a38;
+  box-shadow:inset -1px -1px #000,inset 1px 1px rgba(255,255,255,.12)
+}
+.mini:hover{background:#12301f;color:#fff}
+
+/* 视频 */
+#view-video .frame{flex:1 1 auto}
+.video-body{flex:1;display:flex;align-items:center;justify-content:center;padding:10px;background:#000;min-height:0}
+video{display:block;width:100%;height:100%;object-fit:contain;outline:none;background:#000}
+
+/* 右侧文案 */
+.side{width:340px;flex:0 0 340px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.side h1{
+  margin:0;font-size:26px;line-height:1.35;letter-spacing:.01em;
+  text-shadow:0 0 18px rgba(61,255,124,.28)
+}
+.lead{margin:0;color:#a8cbb6;font-size:13.5px;line-height:1.75}
+.steps{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.steps li{display:flex;gap:9px;font-size:13px;color:#cfeeda;line-height:1.5}
+.steps b{color:var(--green)}
+.n{
+  flex:0 0 auto;width:20px;height:20px;display:grid;place-items:center;font-size:11px;font-weight:700;
+  color:#03210f;background:linear-gradient(180deg,#5cff95,#22c25c);border-radius:3px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7)
+}
+.btn{
+  font:inherit;cursor:pointer;align-self:flex-start;
+  padding:12px 22px;font-size:14px;font-weight:700;letter-spacing:.02em;
+  color:#03210f;background:linear-gradient(180deg,#5cff95,#1fb757);
+  border:1px solid #8dffb8;
+  box-shadow:inset -1px -1px rgba(0,0,0,.35),inset 1px 1px rgba(255,255,255,.75),
+             0 0 18px rgba(61,255,124,.35),0 4px 0 #0b5c2f
+}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(2px);box-shadow:inset -1px -1px rgba(0,0,0,.35),inset 1px 1px rgba(255,255,255,.75),0 1px 0 #0b5c2f}
+.hint{margin:0;font-size:11.5px;color:#6f9a83}
+
+/* 可玩 Demo */
+.play-frame{flex:1;min-height:0}
+#demoFrame{flex:1;width:100%;border:0;background:var(--bg);display:block}
+
+@media (max-width:920px){
+  #view-video{flex-direction:column;overflow:auto}
+  #view-video .frame{min-height:48vh}
+  .side{width:auto;flex:0 0 auto}
+  .bar-right{display:none}
+}
+</style>
+</head>
+<body>
+<div class="crt" aria-hidden="true"></div>
+
+<header class="bar">
+  <div class="brand"><span class="logo">98</span>CLUB <span class="dim">/ DEMO PACK</span></div>
+  <nav class="tabs">
+    <button class="tab is-on" data-view="video">演示视频</button>
+    <button class="tab" data-view="play">立即体验</button>
+  </nav>
+  <div class="bar-right">
+    <span class="chip">零依赖 · 纯前端</span>
+    <a class="chip" href="index.html" target="_blank" rel="noopener">新窗口打开 ↗</a>
+  </div>
+</header>
+
+<main>
+  <!-- 视频 -->
+  <section id="view-video" class="view is-on">
+    <div class="frame">
+      <div class="frame-bar"><span class="dot"></span>98club-demo.mp4 — 00:39 · 1920×1080</div>
+      <div class="video-body">
+        <video id="demoVideo" controls playsinline preload="metadata"
+               poster="98club-shot-1-桌面.png">
+          <source src="98club-demo.mp4" type="video/mp4">
+          你的浏览器不支持视频播放，可直接打开 index.html 体验 Demo。
+        </video>
+      </div>
+    </div>
+
+    <aside class="side">
+      <h1>39 秒看完，<br>然后自己上手玩一遍</h1>
+      <p class="lead">左边是真实点击录制的完整流程，右边按钮直接进入可玩版本。房间、准备、结算、排行榜全都是真的前端状态，不是截图。</p>
+      <ol class="steps">
+        <li><span class="n">1</span><span>点 <b>游戏大厅</b>，创建一间房</span></li>
+        <li><span class="n">2</span><span>拉队友、按 <b>准备</b>，全员就绪自动开局</span></li>
+        <li><span class="n">3</span><span>点 <b>模拟对局结算</b>，收下胜利积分</span></li>
+      </ol>
+      <button class="btn" id="goPlay">▶ 进入可玩 Demo</button>
+      <p class="hint">建议全屏（F11）投屏演示；刷新即恢复初始演示态。</p>
+    </aside>
+  </section>
+
+  <!-- 可玩 -->
+  <section id="view-play" class="view">
+    <div class="frame play-frame" id="playFrame">
+      <div class="frame-bar">
+        <span class="dot"></span>98 CLUB — 可玩 Demo
+        <span class="grow"></span>
+        <button class="mini" id="btnReload" title="重新加载，回到初始演示态">重载</button>
+        <button class="mini" id="btnFull" title="全屏演示">全屏</button>
+        <a class="mini" href="index.html" target="_blank" rel="noopener">新窗口 ↗</a>
+      </div>
+      <iframe id="demoFrame" title="98 CLUB 可玩 Demo" data-src="index.html" allow="fullscreen"></iframe>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  const tabs = document.querySelectorAll('.tab');
+  const views = { video: document.getElementById('view-video'), play: document.getElementById('view-play') };
+  const frame = document.getElementById('demoFrame');
+
+  function show(name) {
+    Object.entries(views).forEach(([k, el]) => el.classList.toggle('is-on', k === name));
+    tabs.forEach(t => t.classList.toggle('is-on', t.dataset.view === name));
+    if (name === 'play' && !frame.getAttribute('src')) {
+      frame.setAttribute('src', frame.dataset.src); // 首次进入才加载，保证开机动画从 0 开始播
+    }
+    if (name === 'video') {
+      const v = document.getElementById('demoVideo');
+      if (v) v.pause(); // 离开时暂停，避免切回来还在后台播
+    }
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.view)));
+  document.getElementById('goPlay').addEventListener('click', () => show('play'));
+
+  document.getElementById('btnReload').addEventListener('click', () => {
+    frame.setAttribute('src', frame.dataset.src); // 重置为初始演示态
+  });
+
+  document.getElementById('btnFull').addEventListener('click', () => {
+    const box = document.getElementById('playFrame');
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (box.requestFullscreen) box.requestFullscreen();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '1') show('video');
+    if (e.key === '2') show('play');
+  });
+})();
+</script>
+</body>
+</html>

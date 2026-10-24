@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>98 CLUB - 复古游戏俱乐部</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 开机画面 -->
+<div id="boot">
+  <div class="boot-inner">
+    <div class="boot-logo">98 CLUB</div>
+    <div class="boot-lines">
+      <p>BIOS v9.8 — CLUB BIOS (C) 1998 PixelWorks</p>
+      <p>内存检测: 65536K OK</p>
+      <p>检测磷光屏 ... CRT-GREEN [正常]</p>
+      <p>加载俱乐部系统 <span class="cursor">█</span></p>
+    </div>
+    <div class="boot-bar"><div class="boot-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- CRT 扫描线层 -->
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="crt-band" aria-hidden="true"></div>
+
+<!-- 桌面 -->
+<div id="desktop">
+
+  <!-- 桌面图标 -->
+  <div id="icons">
+    <button class="d-icon" data-win="lobby">
+      <span class="d-icon-img">🕹️</span>
+      <span class="d-icon-label">游戏大厅</span>
+    </button>
+    <button class="d-icon" data-win="board">
+      <span class="d-icon-img">🏆</span>
+      <span class="d-icon-label">排行榜</span>
+    </button>
+    <button class="d-icon" data-win="sysinfo">
+      <span class="d-icon-img">💻</span>
+      <span class="d-icon-label">系统信息</span>
+    </button>
+    <button class="d-icon" data-win="victory">
+      <span class="d-icon-img">🎉</span>
+      <span class="d-icon-label">胜利结算</span>
+    </button>
+  </div>
+
+  <!-- 窗口：游戏大厅 -->
+  <section class="window" id="win-lobby" data-title="游戏大厅" data-icon="🕹️">
+    <div class="titlebar">
+      <span class="t-text">🕹️ 游戏大厅.exe</span>
+      <span class="t-btns">
+        <button class="t-btn t-min" title="最小化">─</button>
+        <button class="t-btn t-close" title="关闭">✕</button>
+      </span>
+    </div>
+    <div class="win-body">
+
+      <!-- 大厅视图 -->
+      <div id="lobbyView">
+        <div class="statusline">
+          <span>玩家: <b class="neon">指挥官_98</b>(你)</span>
+          <span id="lobbyState">状态: 未加入房间</span>
+          <span>本地模拟演示 · 数据非真实在线</span>
+        </div>
+
+        <div class="panel-title">▶ 游戏列表</div>
+        <div id="gameGrid" class="game-grid"></div>
+
+        <div class="panel-title">▶ 房间列表 <span class="muted" id="roomCount"></span></div>
+        <div id="roomList" class="room-well"></div>
+      </div>
+
+      <!-- 房间视图（组队互动） -->
+      <div id="roomView" class="hidden">
+        <div class="room-head">
+          <div>
+            <div id="roomName" class="room-title">—</div>
+            <div id="roomMeta" class="muted">—</div>
+          </div>
+          <div class="room-actions">
+            <button class="btn btn-accent" id="btnReady">准备</button>
+            <button class="btn" id="btnSettle">模拟对局结算</button>
+            <button class="btn btn-danger" id="btnLeave">退出房间</button>
+          </div>
+        </div>
+
+        <div class="panel-title">▶ 房间成员 <span class="neon" id="readyCount"></span></div>
+        <div id="memberList" class="room-well"></div>
+
+        <div class="panel-title">▶ 房间日志</div>
+        <div id="roomLog" class="room-well log"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 窗口：排行榜 -->
+  <section class="window" id="win-board" data-title="排行榜" data-icon="🏆">
+    <div class="titlebar">
+      <span class="t-text">🏆 排行榜.exe</span>
+      <span class="t-btns">
+        <button class="t-btn t-min">─</button>
+        <button class="t-btn t-close">✕</button>
+      </span>
+    </div>
+    <div class="win-body">
+      <div class="tabs" id="boardTabs">
+        <button class="tab active" data-game="all">综合</button>
+        <button class="tab" data-game="snake">贪吃蛇</button>
+        <button class="tab" data-game="mine">扫雷</button>
+        <button class="tab" data-game="race">赛车</button>
+      </div>
+      <div class="panel-title">▶ 98 CLUB 段位榜（固定赛季数据）</div>
+      <div id="boardList" class="room-well"></div>
+    </div>
+  </section>
+
+  <!-- 窗口：系统信息 -->
+  <section class="window" id="win-sysinfo" data-title="系统信息" data-icon="💻">
+    <div class="titlebar">
+      <span class="t-text">💻 系统信息.exe</span>
+      <span class="t-btns">
+        <button class="t-btn t-min">─</button>
+        <button class="t-btn t-close">✕</button>
+      </span>
+    </div>
+    <div class="win-body">
+      <div class="sys-grid">
+        <div class="sys-row"><span class="sys-k">系统</span><span>Windows 98 CLUB 特别版（本地模拟）</span></div>
+        <div class="sys-row"><span class="sys-k">处理器</span><span>Pentium-Club @ 98MHz · 磷光绿加速</span></div>
+        <div class="sys-row"><span class="sys-k">内存</span><span>640K（对任何人来说都足够了）</span></div>
+        <div class="sys-row"><span class="sys-k">显示</span><span>CRT 磷光屏 · 256 色 · 60Hz</span></div>
+        <div class="sys-row"><span class="sys-k">网络</span><span>未连接 —— 本地演示，所有玩家与数据均为模拟</span></div>
+        <div class="sys-row"><span class="sys-k">版本</span><span>98 CLUB v0.9.8 · 黑客松冲刺版</span></div>
+      </div>
+      <div class="panel-title">▶ 演示操作指南</div>
+      <div class="room-well log">
+        <p>1. 单击「游戏大厅」→ 创建或加入一个房间</p>
+        <p>2. 在房间内点击「准备」，观察队友（模拟玩家）自动就绪</p>
+        <p>3. 全员就绪后点击「模拟对局结算」触发胜利彩蛋</p>
+        <p>4. 所有窗口可拖动、可最小化、可关闭，任务栏可恢复</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toast 通知 -->
+  <div id="toasts"></div>
+</div>
+
+<!-- 任务栏 -->
+<div id="taskbar">
+  <button id="startBtn"><span class="start-logo">98</span> 开始</button>
+  <div id="taskItems"></div>
+  <button id="soundBtn">♪ 音效: 关</button>
+  <div id="clock">--:--</div>
+</div>
+
+<!-- 开始菜单 -->
+<div id="startMenu" class="hidden">
+  <div class="sm-banner">98 CLUB</div>
+  <button class="sm-item" data-act="open-lobby">🕹️ 游戏大厅</button>
+  <button class="sm-item" data-act="open-board">🏆 排行榜</button>
+  <button class="sm-item" data-act="open-sysinfo">💻 系统信息</button>
+  <div class="sm-sep"></div>
+  <button class="sm-item" data-act="reset">🔄 重新演示（复位全部状态）</button>
+</div>
+
+<!-- 胜利结算弹窗 -->
+<div id="victoryOverlay" class="hidden">
+  <div class="victory-win">
+    <div class="titlebar titlebar-v">
+      <span class="t-text">🎉 对局结算 - VICTORY</span>
+      <span class="t-btns"><button class="t-btn t-close" id="victoryClose">✕</button></span>
+    </div>
+    <div class="win-body victory-body">
+      <div class="v-trophy">🏆</div>
+      <div class="v-title">VICTORY!</div>
+      <div class="v-sub" id="vSub">贪吃蛇大作战 · 排位赛</div>
+      <div class="v-stats">
+        <div class="v-stat"><span class="v-num" data-v="12">0</span><span class="v-k">击倒</span></div>
+        <div class="v-stat"><span class="v-num" data-v="3">0</span><span class="v-k">助攻</span></div>
+        <div class="v-stat"><span class="v-num" data-v="25">0</span><span class="v-k neon">积分 +</span></div>
+      </div>
+      <div class="v-mvp">🏅 本局 MVP: 指挥官_98（你）</div>
+      <button class="btn btn-accent v-btn" id="victoryOk">收下胜利</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
